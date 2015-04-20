@@ -43,12 +43,12 @@ var WebServices = function() {
 		console.log('WS - getEvent() - queryParam:'+queryParam);
 		ajaxRequest(REQUEST_TYPE_GET, CONTENT_TYPE_JSON, 'calendars/' + id + '/events' + queryParam, loan, callbackSuccess, callbackError);
 	};
-	this.getNextEvents = function(id, callbackSuccess, callbackError) {
+	this.getNextEvents = function(id, loan, callbackSuccess, callbackError) {
 		console.log('WS - getNextEvents()');
 		var timeMin = getCurrentDate(true);
 		var queryParam = '?singleEvents=true&orderBy=startTime&q='+SUMMARY_PREFIX + '&timeMin=' + timeMin;
 		console.log('WS - getNextEvents() - queryParam:'+queryParam);
-		ajaxRequest(REQUEST_TYPE_GET, CONTENT_TYPE_JSON, 'calendars/' + id + '/events' + queryParam, null, callbackSuccess, callbackError);
+		ajaxRequest(REQUEST_TYPE_GET, CONTENT_TYPE_JSON, 'calendars/' + id + '/events' + queryParam, loan, callbackSuccess, callbackError);
 	};
 
 	/**

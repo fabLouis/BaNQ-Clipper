@@ -56,7 +56,6 @@ $(document).ready(function() {
   chrome.storage.sync.set({"dayBefore": _dayBefore});
 });
 
-
 function initUserCalendarSelect() {
   _webServices.getCalendarList(
     function(result) {
@@ -65,12 +64,6 @@ function initUserCalendarSelect() {
         var item = result.items[i];
         if (_.isEqual(item.accessRole, "owner") && _.isEqual(item.primary, true)) {
           _calendarSelect = item.id;
-          // var selected = _.isEqual(item.id, _calendarSelect);
-          // $('#calendarSelect')
-          //    .append($("<option></option>")
-          //    .attr("value", item.id)
-          //    .prop('selected', selected)
-          //    .text(item.summary));
         }
       }
       initLoansList(initEventsList());
@@ -78,8 +71,6 @@ function initUserCalendarSelect() {
     function (xOptions, textStatus) {
       console.log('getCalendarList - xOptions: '+xOptions);
       if (_.isEqual(xOptions.status, 401)) { // Unauthorized, token must be refreshed
-        // getAuthToken();
-        // initUserCalendarSelect();
         $("#googleAuthButton").show();
         $("#authorizedDiv").hide();
       }
@@ -111,7 +102,6 @@ function initLoansList(callbackEnd) {
         },
         function (xOptions, textStatus) {
           console.log('getEvent - xOptions: '+xOptions);
-          // TODO
           chrome.identity.getAuthToken({'interactive': false}, function(token) {
               chrome.identity.removeCachedAuthToken({token:token}, function(){
                   console.log('logout');
@@ -123,10 +113,10 @@ function initLoansList(callbackEnd) {
   }
 }
 
-function initEventsList() {
+function initEventsList(loan) {
   $('#eventsListUl').empty();
-   _webServices.getNextEvents(_calendarSelect, 
-      function(result) {
+   _webServices.getNextEvents(_calendarSelect, loan, 
+      function(result, loan) {
         if (result.items.length > 0) {
           for (var i = 0; i < result.items.length; i++) { 
             var item = result.items[i];
@@ -135,13 +125,12 @@ function initEventsList() {
             var htmlLink =  '<a href="'+item.htmlLink+'" target="_blank" class="secondary-content"><i class="tiny mdi-action-open-in-browser"></i></a>';
             $('#eventsListUl').append(htmlContent + htmlLink + '</li>');
             // Add to the associated loan  the event link
-            $('#loansListUl li').filter('#32002517576235').append(htmlLink);
+            $('#loansListUl li').filter('#'+loan.number).append(htmlLink);
           }
         }
       },
       function (xOptions, textStatus) {
         console.log('getEvent - xOptions: '+xOptions);
-        // TODO
       }
     );
 }    
@@ -152,6 +141,7 @@ function getAuthToken() {
     _token = token;
     console.log('token retrieved: ' + _token);
     chrome.storage.sync.set({token: _token});
+    location.reload();
   });
 }
 
@@ -159,18 +149,7 @@ function insertEvent(loan) {
   _webServices.insertEvent(_calendarSelect, loan.title, loan.number, loan.due, _dayBefore, function(result) {
     console.log('insertEvent - added: '+loan.title);
     Materialize.toast(chrome.i18n.getMessage("eventAdded") + loan.title, 4000);
-    initEventsList();
+    initEventsList(loan);
   });
 }
 
-
-
-// chrome.runtime.onMessage.addListener(
-//   function(req, sender, sendResponse) {
-//   if (req.loans) {
-//   	sendResponse({result: "catch it"});
-//     var loans = req.loans;
-//     console.log('loans '+loans.length);
-//     $( "h1" ).append(loans.length);
-//   }
-// });
