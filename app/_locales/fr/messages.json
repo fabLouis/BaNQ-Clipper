@@ -1,0 +1,34 @@
+{
+  "appName": {
+    "message": "BAnQ Emprunt Clipper",
+    "description": ""
+  },
+  "appDescription": {
+    "message": "Synchroniser vos emprunts de la BAnQ avec votre calendrier Google",
+    "description": ""
+  },
+  "googleAuthorization": {
+    "message": "Google Authorisation",
+    "description": ""
+  },
+  	"menuLoans": {
+    "message": "emprunts",
+    "description": ""
+  },
+    "menuEvents": {
+    "message": "calendrier",
+    "description": ""
+  },
+    "noteLoans": {
+    "message": "Vos derniers emprunts provenant du site de la BAnQ",
+    "description": ""
+  },
+    "noteEvents": {
+    "message": "Tous vos futurs évènements provenant de votre calendrier Google",
+    "description": ""
+  },
+    "eventAdded": {
+    "message": "Évènement ajouté pour : ",
+    "description": ""
+  }
+}

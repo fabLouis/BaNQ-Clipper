@@ -1,0 +1,34 @@
+{
+  "appName": {
+    "message": "BAnQ Loan Clipper",
+    "description": ""
+  },
+  "appDescription": {
+    "message": "Synchronize your BAnQ's loans with your Google Calendar",
+    "description": ""
+  },
+  "googleAuthorization": {
+    "message": "Google Authorization",
+    "description": ""
+  },
+  	"menuLoans": {
+    "message": "LOANS",
+    "description": ""
+  },
+    "menuEvents": {
+    "message": "EVENTS",
+    "description": ""
+  },
+    "noteLoans": {
+    "message": "Your current loans retrieved from BAnQ website records",
+    "description": ""
+  },
+    "noteEvents": {
+    "message": "All your next events from your Google Calendar",
+    "description": ""
+  },
+    "eventAdded": {
+    "message": "Event added for: ",
+    "description": ""
+  }
+}

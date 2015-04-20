@@ -1,0 +1,55 @@
+{
+  "name": "__MSG_appName__",
+  "version": "1.0.0",
+  "manifest_version": 2,
+  "description": "__MSG_appDescription__",
+  "icons": {
+    "16": "images/icon-16.png",
+    "128": "images/icon-128.png"
+  },
+  "default_locale": "en",
+  "background": {
+    "scripts": [
+      "scripts/background.js"
+    ]
+  },
+  /*"options_page": "options.html",*/
+  "content_scripts": [{
+        "matches": ["*://iris.banq.qc.ca/*MyZone*"],
+        "js":      [
+          "bower_components/jquery/dist/jquery.js",
+          "bower_components/underscore/underscore.js", 
+          "scripts/content.js"
+        ],
+        "all_frames": true
+    }],
+  "page_action": {
+    "default_icon": {
+      "19": "images/icon-19.png",
+      "38": "images/icon-38.png"
+    },
+    "default_title": "BAnQClipper",
+    "default_popup": "popup.html"
+  },
+  "permissions": [
+    "declarativeContent",
+    "activeTab",
+    "tabs",
+    "*://iris.banq.qc.ca/*",
+    "storage",
+    "identity",
+    "*://*.google.com/*"
+  ],
+  "oauth2": {
+    "client_id": "595333355437-85ppqaugdstnd071kbnhret2aguvor7q.apps.googleusercontent.com",
+    "scopes": [
+      "https://www.googleapis.com/auth/calendar"
+    ]
+  }/*,
+  "content_security_policy": "script-src https://*.google.com 'unsafe-eval'; object-src 'self'"
+  ,
+  "web_accessible_resources": [
+    "bower_components/jquery/dist/jquery.min.js", 
+    "bower_components/jquery/dist/jquery.min.map"
+  ] */
+}
