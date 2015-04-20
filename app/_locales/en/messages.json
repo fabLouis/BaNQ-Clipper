@@ -30,5 +30,13 @@
     "eventAdded": {
     "message": "Event added for: ",
     "description": ""
+  },
+    "noLoan": {
+    "message": "No loans currently",
+    "description": ""
+  },
+    "noEvent": {
+    "message": "No events currently",
+    "description": ""
   }
 }

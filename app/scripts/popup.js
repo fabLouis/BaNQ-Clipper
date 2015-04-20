@@ -80,36 +80,40 @@ function initUserCalendarSelect() {
 
 function initLoansList(callbackEnd) {
   $('#loansListUl').empty();
-  for (var i = 0; i < _loans.length; i++) { 
-    var loanItem = _loans[i];
-    if (!_.isNull(loanItem)) {
-      // check if the event is already added to the calendar
-      _webServices.getEvent(_calendarSelect, loanItem, _dayBefore,
-        function(result, loan) {
-          var htmlContent = '<li class="collection-item avatar" id="'+loan.number+'"><i class="mdi-av-my-library-books circle black"></i><span class="truncate"><b>' + loan.title 
-            + '</b></span><p>'+loan.number+'<br>'+loan.due+'</p>';
-          if (_.isEqual(result.items.length, 1)) {
-            console.log('getEvent');
-            var item = result.items[0];
-            htmlContent += '<a href="'+item.htmlLink+'" target="_blank" class="secondary-content"><i class="tiny mdi-action-open-in-browser"></i></a>';
-          } else {
-            insertEvent(loan);
+  if (!_.isUndefined(_loans)) {
+    for (var i = 0; i < _loans.length; i++) { 
+      var loanItem = _loans[i];
+      if (!_.isNull(loanItem)) {
+        // check if the event is already added to the calendar
+        _webServices.getEvent(_calendarSelect, loanItem, _dayBefore,
+          function(result, loan) {
+            var htmlContent = '<li class="collection-item avatar" id="'+loan.number+'"><i class="mdi-av-my-library-books circle blue darken-2"></i><span class="truncate"><b>' + loan.title 
+              + '</b></span><p>'+loan.number+'<br>'+loan.due+'</p>';
+            if (_.isEqual(result.items.length, 1)) {
+              console.log('getEvent');
+              var item = result.items[0];
+              htmlContent += '<a href="'+item.htmlLink+'" target="_blank" class="secondary-content"><i class="tiny mdi-action-open-in-browser"></i></a>';
+            } else {
+              insertEvent(loan);
+            }
+            $('#loansListUl').append(htmlContent + '</li>');
+            if (callbackEnd) {
+              callbackEnd();
+            }
+          },
+          function (xOptions, textStatus) {
+            console.log('getEvent - xOptions: '+xOptions);
+            chrome.identity.getAuthToken({'interactive': false}, function(token) {
+                chrome.identity.removeCachedAuthToken({token:token}, function(){
+                    console.log('logout');
+                });
+            });
           }
-          $('#loansListUl').append(htmlContent + '</li>');
-          if (callbackEnd) {
-            callbackEnd();
-          }
-        },
-        function (xOptions, textStatus) {
-          console.log('getEvent - xOptions: '+xOptions);
-          chrome.identity.getAuthToken({'interactive': false}, function(token) {
-              chrome.identity.removeCachedAuthToken({token:token}, function(){
-                  console.log('logout');
-              });
-          });
-        }
-      );
+        );
+      }
     }
+  } else {
+    $('#loansListUl').append('<li class="collection-item">'+chrome.i18n.getMessage("noLoan")+'</li>');
   }
 }
 
@@ -127,6 +131,8 @@ function initEventsList(loan) {
             // Add to the associated loan  the event link
             $('#loansListUl li').filter('#'+loan.number).append(htmlLink);
           }
+        } else {
+          $('#eventsListUl').append('<li class="collection-item">'+chrome.i18n.getMessage("noEvent")+'</li>');
         }
       },
       function (xOptions, textStatus) {

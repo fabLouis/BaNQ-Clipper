@@ -30,5 +30,13 @@
     "eventAdded": {
     "message": "Évènement ajouté pour : ",
     "description": ""
+  },
+    "noLoan": {
+    "message": "Pas d'emprunts présentement",
+    "description": ""
+  },
+    "noEvent": {
+    "message": "Pas d'évènement présentement",
+    "description": ""
   }
 }
