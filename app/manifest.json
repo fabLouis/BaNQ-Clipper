@@ -50,7 +50,7 @@
     "*://*.google.com/*"
   ],
   "oauth2": {
-    "client_id": "595333355437-1k68aducn84ela8hh4qq7s622srgpcqq.apps.googleusercontent.com",
+    "client_id": "",
     "scopes": [
       "https://www.googleapis.com/auth/calendar"
     ]
