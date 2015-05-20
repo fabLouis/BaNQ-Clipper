@@ -28,7 +28,7 @@
     "description": ""
   },
     "eventAdded": {
-    "message": "Évènement ajouté pour : ",
+    "message": "Évènement ajouté pour le document : ",
     "description": ""
   },
     "noLoan": {
@@ -37,6 +37,10 @@
   },
     "noEvent": {
     "message": "Pas d'évènement présentement",
+    "description": ""
+  },
+    "daysLeft": {
+    "message": "jours restant",
     "description": ""
   }
 }

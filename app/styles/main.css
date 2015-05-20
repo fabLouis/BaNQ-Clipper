@@ -1,6 +1,5 @@
 body {
-	width:400px;
-	/*height:500px;*/
+	min-width:400px;
 }
 .container {
   width: 100%; 
@@ -22,4 +21,10 @@ body {
 }
 .toast {
   font-size: 0.75rem;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
 }
+.progress {
+	background-color: #9e9e9e;
+}	

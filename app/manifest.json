@@ -1,6 +1,6 @@
 {
   "name": "__MSG_appName__",
-  "version": "1.0.0",
+  "version": "1.0.5",
   "manifest_version": 2,
   "description": "__MSG_appDescription__",
   "icons": {
@@ -13,16 +13,24 @@
       "scripts/background.js"
     ]
   },
-  /*"options_page": "options.html",*/
-  "content_scripts": [{
-        "matches": ["*://iris.banq.qc.ca/*MyZone*"],
-        "js":      [
-          "bower_components/jquery/dist/jquery.js",
-          "bower_components/underscore/underscore.js", 
-          "scripts/content.js"
-        ],
-        "all_frames": true
-    }],
+  "content_scripts": [
+    {
+      "matches": [
+        "*://iris.banq.qc.ca/*MyZone*"
+      ],
+      "js": [
+        "bower_components/jquery/dist/jquery.js",
+        "bower_components/underscore/underscore-min.js",
+        "bower_components/materialize/dist/js/materialize.min.js",
+        "bower_components/moment/min/moment.min.js",
+        "scripts/content.js",
+        "scripts/utility.js",
+        "scripts/webservices.js",
+        "scripts/auth.js"
+      ],
+      "all_frames": true
+    }
+  ],
   "page_action": {
     "default_icon": {
       "19": "images/icon-19.png",
@@ -38,18 +46,13 @@
     "*://iris.banq.qc.ca/*",
     "storage",
     "identity",
+    "notifications",
     "*://*.google.com/*"
   ],
   "oauth2": {
-    "client_id": "595333355437-85ppqaugdstnd071kbnhret2aguvor7q.apps.googleusercontent.com",
+    "client_id": "595333355437-1k68aducn84ela8hh4qq7s622srgpcqq.apps.googleusercontent.com",
     "scopes": [
       "https://www.googleapis.com/auth/calendar"
     ]
-  }/*,
-  "content_security_policy": "script-src https://*.google.com 'unsafe-eval'; object-src 'self'"
-  ,
-  "web_accessible_resources": [
-    "bower_components/jquery/dist/jquery.min.js", 
-    "bower_components/jquery/dist/jquery.min.map"
-  ] */
+  }
 }

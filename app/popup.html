@@ -5,87 +5,38 @@
     <meta name="theme-color" content="#EE6E73">
     <!-- build:css styles/vendor.css -->
     <!-- bower:css -->
+    <link href="bower_components/materialize/dist/css/materialize.min.css" rel="stylesheet">
     <!-- endbower -->
     <!-- endbuild -->
-    <link href="bower_components/materialize/dist/css/materialize.min.css" rel="stylesheet">
+    
     <!-- build:css styles/main.css -->
     <link href="styles/main.css" rel="stylesheet">
     <!-- endbuild -->
   </head>
   <body>
+    
     <div class="container">
         <div class="row">
-            <div class="col s12">
-              <ul class="tabs z-depth-0 black">
-                <li class="tab col s3"><a href="#tab1"><span i18n-content="menuLoans"></span> <i class="tiny mdi-av-my-library-books"></i></a></li>
-                <li class="tab col s3"><a href="#tab2"><span i18n-content="menuEvents"></span> <i class="tiny mdi-notification-event-available"></i></a></li>
-                <!-- <li class="tab col s3"><a href="#tab3">SETTINGS <i class="tiny mdi-action-settings"></i></a></li> -->
-              </ul>
-            </div>
             <div id="tab1" class="col s12"><br>
                 <center><button id="googleAuthButton" class="waves-effect blue darken-2 btn" i18n-content="googleAuthorization"></button></center>
                 <div id="authorizedDiv">
+                    <div class="progress"><div class="indeterminate blue darken-2"></div></div>
                     <ul class="collection z-depth-1" id="loansListUl"></ul>
-                    <p><i i18n-content="noteLoans"></i> <a href="https://iris.banq.qc.ca/alswww2.dll/APS_ZONES?fn=MyZone" target="_blank"><i class="tiny mdi-content-link"></i></a></p>
                 </div>
             </div>
-            <div id="tab2" class="col s12"><br>
-                <ul class="collection z-depth-1" id="eventsListUl"></ul>
-                <p><i i18n-content="noteEvents"></i> <a href="https://www.google.com/calendar" target="_blank"><i class="tiny mdi-content-link"></i></a></p>
-            </div>
-            <!-- <div id="tab3" class="col s12"><br>
-                <ul class="collapsible popout" data-collapsible="accordion">
-                <li>
-                    <div class="collapsible-header"><i class="mdi-notification-event-available"></i>Default Google Calendar</div>
-                    <div class="collapsible-body">
-                        <p>
-                            <label>Select another calendar to insert events</label>
-                            <select id="calendarSelect" class="browser-default"></select>
-                        </p>
-                    </div>
-                </li>
-                <li>
-                    <div class="collapsible-header"><i class="mdi-action-history"></i>Update event's end date</div>
-                    <div class="collapsible-body">
-                        <p>
-                          <input type="checkbox" class="filled-in" id="dayBeforeCheckbox"/>
-                          <label for="dayBeforeCheckbox">Insert events to calendar, the day before the due date</label>
-                        </p>
-                    </div>
-                </li>
-                <li>
-                    <div class="collapsible-header"><i class="mdi-action-alarm"></i>Reminder</div>
-                    <div class="collapsible-body">
-                        <p>
-                            Add a notification
-                            <select id="reminderMethodSelect" class="browser-default">
-                                <option value="" disabled selected>Choose your option</option>
-                                <option value="email">Email</option>
-                                <option value="sms">SMS</option>
-                                <option value="popup">Pop-up</option>
-                            </select>
-                        </p>
-                    </div>
-                </li>
-                <li>
-                    <div class="collapsible-header"><i class="mdi-action-info"></i>About</div>
-                    <div class="collapsible-body">
-                        <p>Contact us by <a href="mailto:fabien.duthu@gmail.com" target="_blank">email</a></p>
-                    </div>
-                </li>
-              </ul>
-            </div> -->
         </div>
     </div>
 
     <!-- build:js scripts/vendor.js -->
     <!-- bower:js -->
     <script src="bower_components/jquery/dist/jquery.min.js"></script>
-    <script src="bower_components/underscore/underscore.js"></script>
+    <script src="bower_components/underscore/underscore-min.js"></script>
     <script src="bower_components/materialize/dist/js/materialize.min.js"></script>
     <script src="bower_components/moment/min/moment.min.js"></script>
     <!-- endbower -->
     <!-- endbuild -->
+    <script src="scripts/utility.js"></script>
+    <script src="scripts/auth.js"></script>
     <script src="scripts/webservices.js"></script>
     <!-- build:js scripts/popup.js -->
     <script src="scripts/popup.js"></script>
