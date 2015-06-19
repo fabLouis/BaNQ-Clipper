@@ -4,7 +4,7 @@
     "description": ""
   },
   "appDescription": {
-    "message": "Synchroniser vos emprunts de la BAnQ avec votre calendrier Google",
+    "message": "Synchroniser automatiquement vos emprunts de la BAnQ avec votre calendrier Google",
     "description": ""
   },
   "googleAuthorization": {
@@ -29,6 +29,10 @@
   },
     "eventAdded": {
     "message": "Évènement ajouté pour le document : ",
+    "description": ""
+  },
+    "eventRemoved": {
+    "message": "Évènement supprimé pour le document : ",
     "description": ""
   },
     "noLoan": {

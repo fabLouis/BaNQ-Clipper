@@ -4,7 +4,7 @@
     "description": ""
   },
   "appDescription": {
-    "message": "Synchronize your BAnQ's loans with your Google Calendar",
+    "message": "Synchronize automatically your BAnQ's loans with your Google Calendar",
     "description": ""
   },
   "googleAuthorization": {
@@ -29,6 +29,10 @@
   },
     "eventAdded": {
     "message": "Event added for document: ",
+    "description": ""
+  },
+    "eventRemoved": {
+    "message": "Event removed for document: ",
     "description": ""
   },
     "noLoan": {

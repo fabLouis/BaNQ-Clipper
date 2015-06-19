@@ -10,6 +10,7 @@ $(document).ready(function() {
 
 function divToStorage() {
 	console.log('divToStorage()...');
+	chrome.storage.sync.set({"loans": null});
 	var loans = [];
 	for (var i = 1 ; i <= 10 ; i++) {
 		var loadDiv = $('#item_P'+i);
@@ -28,6 +29,6 @@ function divToStorage() {
 		}
 	}
 	if (!_.isEmpty(loans)) {
-		chrome.storage.sync.set({loans: loans});
+		chrome.storage.sync.set({"loans": loans});
 	}
 }

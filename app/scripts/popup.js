@@ -2,6 +2,7 @@
 
 var _loans, _calendarSelect, _loanSync = 0;
 var _webServices = new WebServices();
+var SUMMARY_PREFIX = '[BAnQ]';
 
 $(document).ready(function() {
   console.log('document ready');
@@ -14,6 +15,7 @@ $(document).ready(function() {
 
   chrome.storage.sync.get("loans", function(data){
     _loans = data["loans"];
+    console.log('loans size: ' + _loans.length);
   });
 
   GAuth.getToken();
@@ -35,10 +37,11 @@ function start() {
   }
 }
 
+
 function initUserCalendarSelect() {
   _webServices.getCalendarList(
     function(result) {
-      console.log('getCalendarList - result: '+result.items.length);
+      console.log('initUserCalendarSelect - getCalendarList - result: '+result.items.length);
       for (var i = 0; i < result.items.length; i++) { 
         var item = result.items[i];
         if (_.isEqual(item.accessRole, "owner") && _.isEqual(item.primary, true)) {
@@ -46,9 +49,10 @@ function initUserCalendarSelect() {
         }
       }
       initLoansList();
+      cleanReturnedLoans();
     },
     function (xOptions, textStatus) {
-      console.log('getCalendarList - xOptions: '+xOptions);
+      console.log('initUserCalendarSelect - getCalendarList - xOptions: '+xOptions);
       if (_.isEqual(xOptions.status, 401)) { // Unauthorized, token must be refreshed
         $("#googleAuthButton").show();
         $("#authorizedDiv").hide();
@@ -57,6 +61,33 @@ function initUserCalendarSelect() {
   );
 }
 
+function cleanReturnedLoans() {
+  _webServices.getNextEvents(_calendarSelect,
+    function(result) {
+      console.log('cleanReturnedLoans - result: '+result.items.length);
+      for (var i = 0; i < result.items.length; i++) { 
+        var item = result.items[i];
+        var titleSearched = item.summary.substring((SUMMARY_PREFIX + " ").length, item.summary.length);
+        var eventExists = _.where(_loans, {title: titleSearched});
+         // not found in current loans, must be deleted
+        if (_.isEqual(eventExists.length, 0)) {
+          _webServices.deleteEvent(_calendarSelect, item,
+            function(result, event) {
+              console.log('cleanReturnedLoans - getNextEvents - deleteEvent - success: '+event.summary);
+              sendNotification(event.summary, true);
+            },
+            function (xOptions, textStatus) {
+              console.log('cleanReturnedLoans - getNextEvents - deleteEvent - xOptions: '+xOptions);
+            }
+          );
+        }
+      }
+    },
+    function (xOptions, textStatus) {
+      console.log('cleanReturnedLoans - getNextEvents - xOptions: '+xOptions);
+    }
+  );
+}
 
 function initLoansList() {
   $('#loansListUl').empty();
@@ -85,8 +116,8 @@ function getEvent(loanItem) {
         if (_.isEqual(item.start.date, banqDate) && _.isEqual(item.end.date, banqDate)) {
           htmlContent += '<a href="'+item.htmlLink+'" target="_blank" class="secondary-content"><i class="tiny mdi-action-open-in-browser"></i></a>';
         } else {
-          _webServices.deleteEvent(_calendarSelect, item.id,
-            function(result) {
+          _webServices.deleteEvent(_calendarSelect, item,
+            function(result, event) {
               insertEvent(loan);
             },
             function (xOptions, textStatus) {
@@ -132,17 +163,22 @@ function insertEvent(loan) {
   _webServices.insertEvent(_calendarSelect, loan.title, loan.number, loan.due, function(result) {
     console.log('insertEvent - added: '+loan.title);
     // Materialize.toast(chrome.i18n.getMessage("eventAdded") + loan.title, 4000);
-    sendNotification(loan);
+    sendNotification(loan.title);
     getEvent(loan);
     $('#loansListUl li').filter('#'+loan.number).remove();
   });
 }
 
-function sendNotification(loan) {
+function sendNotification(documentTitle, isDeletion) {
+  var msg = chrome.i18n.getMessage("eventAdded");
+  if (isDeletion) {
+    msg = chrome.i18n.getMessage("eventRemoved");
+  }
+  msg += '\n' + documentTitle;
   var options = {
     type: "basic",
     title: chrome.i18n.getMessage("appName"),
-    message: chrome.i18n.getMessage("eventAdded") + '\n' +loan.title,
+    message: msg,
     iconUrl: "images/icon-48.png"
   }
   chrome.notifications.create(null, options);

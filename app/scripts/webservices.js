@@ -6,14 +6,13 @@ var WebServices = function() {
 	var REQUEST_TYPE_DELETE = 'DELETE';
 	var CONTENT_TYPE_JSON = 'application/json; charset=utf-8';
 	var TIMEZONE = 'UTC';
-	var SUMMARY_PREFIX = '[BAnQ]';
 
 	var DESCRIPTION_MSG = '(please do not change the event summary)';
 	var LOCATION = 'BAnQ - Bibliothèque et Archives nationales du Québec, Boulevard de Maisonneuve Est, Montreal, QC, Canada';
 
 	this.getCalendarList = function(callbackSuccess, callbackError) {
 		console.log('WS - getCalendarList()');
-		ajaxRequest(REQUEST_TYPE_GET, CONTENT_TYPE_JSON, 'users/me/calendarList', null, callbackSuccess, callbackError);
+		ajaxRequest(REQUEST_TYPE_GET, CONTENT_TYPE_JSON, 'users/me/calendarList', null, null, callbackSuccess, callbackError);
 	};
 	this.insertEvent = function(calendarId, title, number, dateDue, callbackSuccess, callbackError) {
 		console.log('WS - insertEvent()');
@@ -25,29 +24,30 @@ var WebServices = function() {
 		 "end": { "date": eventDate, "timeZone": TIMEZONE },
 		 "location": LOCATION
 		};
-		ajaxRequest(REQUEST_TYPE_POST, CONTENT_TYPE_JSON, 'calendars/' + calendarId + '/events', bodyParameters, callbackSuccess, callbackError);
+		ajaxRequest(REQUEST_TYPE_POST, CONTENT_TYPE_JSON, 'calendars/' + calendarId + '/events', bodyParameters, null, callbackSuccess, callbackError);
 	};
-	this.deleteEvent = function(calendarId, eventId, callbackSuccess, callbackError) {
+	this.deleteEvent = function(calendarId, event, callbackSuccess, callbackError) {
 		console.log('WS - deleteEvent()');
-		ajaxRequest(REQUEST_TYPE_DELETE, CONTENT_TYPE_JSON, 'calendars/' + calendarId + '/events/' + eventId + '?sendNotifications=true', null, callbackSuccess, callbackError);
+		ajaxRequest(REQUEST_TYPE_DELETE, CONTENT_TYPE_JSON, 'calendars/' + calendarId + '/events/' + event.id, null, event, callbackSuccess, callbackError);
 	};
 	this.getEvent = function(calendarId, loan, callbackSuccess, callbackError) {
-		var queryParam = '?q='+SUMMARY_PREFIX+ '+' + loan.number;
+		var timeMin = Util.getCurrentDate(true);
+		var queryParam = '?q='+SUMMARY_PREFIX+ '+' + loan.number+ '&timeMin=' + timeMin;
 		console.log('WS - getEvent() - queryParam:'+queryParam);
-		ajaxRequest(REQUEST_TYPE_GET, CONTENT_TYPE_JSON, 'calendars/' + calendarId + '/events' + queryParam, loan, callbackSuccess, callbackError);
+		ajaxRequest(REQUEST_TYPE_GET, CONTENT_TYPE_JSON, 'calendars/' + calendarId + '/events' + queryParam, null, loan, callbackSuccess, callbackError);
 	};
-	this.getNextEvents = function(calendarId, loan, callbackSuccess, callbackError) {
+	this.getNextEvents = function(calendarId, callbackSuccess, callbackError) {
 		console.log('WS - getNextEvents()');
 		var timeMin = Util.getCurrentDate(true);
-		var queryParam = '?singleEvents=true&orderBy=startTime&q='+SUMMARY_PREFIX + '&timeMin=' + timeMin;
+		var queryParam = '?q='+SUMMARY_PREFIX + '&timeMin=' + timeMin;
 		console.log('WS - getNextEvents() - queryParam:'+queryParam);
-		ajaxRequest(REQUEST_TYPE_GET, CONTENT_TYPE_JSON, 'calendars/' + calendarId + '/events' + queryParam, loan, callbackSuccess, callbackError);
+		ajaxRequest(REQUEST_TYPE_GET, CONTENT_TYPE_JSON, 'calendars/' + calendarId + '/events' + queryParam, null, null, callbackSuccess, callbackError);
 	};
 
 	/**
 	* GENERIC AJAX FUNCTION.
 	*/
-	function ajaxRequest(requestType, contentType, serviceName, bodyParameters, callbackSuccess, callbackError) {
+	function ajaxRequest(requestType, contentType, serviceName, bodyParameters, callbackData, callbackSuccess, callbackError) {
 		
 		var url = 'https://www.googleapis.com/calendar/v3/' + serviceName;
 		var headers = {
@@ -63,7 +63,6 @@ var WebServices = function() {
 			type: requestType,
 			contentType: contentType,
 			data: data,
-			//dataType: DATA_TYPE_JSON,
 			headers: headers,
 			error: function(xOptions, textStatus, errorThrown) {
 				if (_.isEqual(xOptions.status, 401)) {
@@ -74,9 +73,11 @@ var WebServices = function() {
 				}
 			},
 			success: function(result, status, xhr) {
-				// TODO
 				if (callbackSuccess) {
-					callbackSuccess(result, bodyParameters);
+					if (_.isNull(callbackData)) {
+						callbackData = bodyParameters;
+					}
+					callbackSuccess(result, callbackData);
 				}
 			}
 		});
