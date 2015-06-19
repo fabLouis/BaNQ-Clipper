@@ -7,7 +7,6 @@ var WebServices = function() {
 	var CONTENT_TYPE_JSON = 'application/json; charset=utf-8';
 	var TIMEZONE = 'UTC';
 
-	var DESCRIPTION_MSG = '(please do not change the event summary)';
 	var LOCATION = 'BAnQ - Bibliothèque et Archives nationales du Québec, Boulevard de Maisonneuve Est, Montreal, QC, Canada';
 
 	this.getCalendarList = function(callbackSuccess, callbackError) {
@@ -19,7 +18,7 @@ var WebServices = function() {
 		var eventDate = Util.banqDateToEventDate(dateDue, false);
 		var bodyParameters = {
 		 "summary": SUMMARY_PREFIX + " " + title,
-		 "description": "doc. " + number + "\n\n" + DESCRIPTION_MSG,
+		 "description": generateDescription(number),
 		 "start": { "date": eventDate, "timeZone": TIMEZONE },
 		 "end": { "date": eventDate, "timeZone": TIMEZONE },
 		 "location": LOCATION
@@ -84,6 +83,12 @@ var WebServices = function() {
 	}
 	function getBearer() {
 		return 'Bearer ' + _token;
+	}
+	function generateDescription(documentNumber) {
+		var desc = chrome.i18n.getMessage("descriptionRenew") + 'https://iris.banq.qc.ca/alswww2.dll/APS_ZONES?fn=MyZone' + '\n\n';
+		desc += chrome.i18n.getMessage("descriptionDocument") + documentNumber + '\n\n';
+		desc += chrome.i18n.getMessage("descriptionEnd");
+		return desc;
 	}
 	
 };	

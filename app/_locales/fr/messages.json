@@ -46,5 +46,17 @@
     "daysLeft": {
     "message": "jours restant",
     "description": ""
+  },
+    "descriptionRenew": {
+    "message": "Pour renouveler votre prêt, le lien : ",
+    "description": ""
+  },
+    "descriptionDocument": {
+    "message": "Document : ",
+    "description": ""
+  },
+    "descriptionEnd": {
+    "message": "(svp ne changer pas le titre de l'évènement)",
+    "description": ""
   }
 }
